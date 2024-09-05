@@ -5,7 +5,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Management</title>
+    <title>Employee Management</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -96,69 +96,117 @@
             ></span>
           </div>
           <div class="border-bottom border-top py-3">
-            <a href="#" class="text-decoration-none"
-              ><i class="bi bi-grid-3x3 me-3"></i>View contents</a
+            <a
+              href="<%=request.getContextPath()%>/list"
+              class="text-decoration-none"
+              ><i class="bi bi-grid-3x3 me-3"></i>Employee list</a
             >
           </div>
           <div class="border-bottom py-3">
-            <a href="#" class="text-decoration-none"
-              ><i class="bi bi-pencil-square me-3"></i>Form content</a
+            <a
+              href="<%=request.getContextPath()%>/new"
+              class="text-decoration-none"
+              ><i class="bi bi-pencil-square me-3"></i>Add employee</a
             >
           </div>
         </div>
         <div class="col-sm-10">
           <div class="p-3">
             <h2 class="border-bottom pb-3 mb-4">
-              <c:if test="${user != null}">Edit User</c:if>
-              <c:if test="${user == null}">Add New User</c:if>
+              <c:if test="${employee != null}">Edit Employee</c:if>
+              <c:if test="${employee == null}">Add New Employee</c:if>
             </h2>
 
             <div class="card">
-              <div class="card-header">Information of User</div>
+              <div class="card-header">Information of Employee</div>
               <div class="card-body">
-                <c:if test="${user != null}">
-                  <form action="update" method="post">
-				        </c:if>
-                <c:if test="${user == null}">
-                  <form action="insert" method="post">
-                </c:if>
-                  <c:if test="${user != null}">
-                    <input type="hidden" name="id" value="<c:out value='${user.id}' />" />
+                <form action=${employee != null ? "update" : "insert"} method="post">
+                  <c:if test="${employee != null}">
+                    <input type="hidden" name="id" value="<c:out value='${employee.id}' />" />
                   </c:if>
-                  <div class="mb-3">
-                    <label for="userNameInput" class="form-label"
-                      >User name</label
+                  <div class="row mb-3">
+                    <div class="col">
+                      <label for="firstNameInput" class="form-label"
+                        >First name</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="firstNameInput"
+                        value="<c:out value='${employee.firstName}' />"
+                        name="firstName"
+                        required
+                        minlength="2"
+                      />
+                    </div>
+                    <div class="col">
+                      <label for="lastNameInput" class="form-label"
+                      >Last name</label
                     >
                     <input
                       type="text"
                       class="form-control"
-                      id="userNameInput"
-                      value="<c:out value='${user.name}' />"
-                      name="name"
+                      id="lastNameInput"
+                      value="<c:out value='${employee.lastName}' />"
+                      name="lastName"
                       required
                       minlength="2"
                     />
+                    </div>
                   </div>
-                  <div class="mb-3">
-                    <label for="emailInput" class="form-label"
-                      >Email address</label
+                  <div class="row mb-3">
+                    <div class="col">
+                      <label for="genderInput" class="form-label"
+                        >Gender</label
+                      >
+                      <select class="form-select" id="genderInput" name="gender">
+                        <option value="0" ${employee != null && employee.gender == 0 ? "selected" : ""}>Male</option>
+                        <option value="1" ${employee != null && employee.gender == 1 ? "selected" : ""}>Female</option>
+                        <option value="2" ${employee != null && employee.gender == 2 ? "selected" : ""}>Other</option>
+                      </select>
+                    </div>
+                    <div class="col">
+                      <label for="dateOfBirthInput" class="form-label"
+                      >Date of birth</label
                     >
                     <input
-                      type="email"
+                      type="date"
                       class="form-control"
-                      id="emailInput"
-                      aria-describedby="emailHelp"
-                      value="<c:out value='${user.email}' />"
-                      name="email"
-                      required
+                      id="dateOfBirthInput"
+                      value="<c:out value='${employee.dateOfBirth}' />"
+                      name="dateOfBirth"
                     />
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col">
+                      <label for="phoneInput" class="form-label"
+                        >Phone number</label
+                      >
+                      <input type="tel" class="form-control" id="phoneInput" value="<c:out value='${employee.phone}' />" name="phone"/>
+                    </div>
+                    <div class="col">
+                      <label for="departmentInput" class="form-label"
+                      >Department name</label
+                    >
+                    <input type="text" class="form-control" id="departmentInput" value="<c:out value='${employee.departmentName}' />" name="departmentName"/>
+                    </div>
                   </div>
                   <div class="mb-3">
-                    <label for="phoneInput" class="form-label"
-                      >Phone number</label
+                    <label for="addressInput" class="form-label"
+                      >Address</label
                     >
-                    <input type="tel" class="form-control" id="phoneInput" value="<c:out value='${user.phone}' />" name="phone"/>
+                    <input type="text" class="form-control" id="addressInput" value="<c:out value='${employee.address}' />" name="address"/>
                   </div>
+                  <div class="mb-3">
+                    <label for="remarkInput" class="form-label"
+                      >Remark</label
+                    >
+                    <input type="text" class="form-control" id="remarkInput" value="<c:out value='${employee.remark}' />" name="remark"/>
+                  </div>
+                  <c:if test="${employee == null}">
+                    <button type="reset" class="btn btn-warning">Reset</button>
+                  </c:if>
                   <button type="submit" class="btn btn-primary">Save</button>
                 </form>
               </div>
